@@ -59,15 +59,25 @@ class _PruebaState extends State<Prueba> {
     await databaseReference.collection(db).document("1").setData({
       'line': '366',
     });
-     await databaseReference.collection(db).document("1").collection('rutaida').document('1').setData({
+    await databaseReference
+        .collection(db)
+        .document("1")
+        .collection('rutaida')
+        .document('1')
+        .setData({
       'point': GeoPoint(-16.506721, -68.139761),
     });
 
-     // 2
+    // 2
     await databaseReference.collection(db).document("2").setData({
       'line': '259',
     });
-     await databaseReference.collection(db).document("2").collection('rutaida').document('1').setData({
+    await databaseReference
+        .collection(db)
+        .document("2")
+        .collection('rutaida')
+        .document('1')
+        .setData({
       'point': GeoPoint(-16.508943, -68.135652),
     });
 
@@ -87,16 +97,31 @@ class _PruebaState extends State<Prueba> {
     //     (f) => print('${f.data}}'),
     //   );
     // });
-    databaseReference
+
+    // databaseReference
+    //     .collection(db)
+    //     .document('1')
+    //     .collection('rutaida')
+    //     .document('1')
+    //     .get()
+    //     .then((DocumentSnapshot ds) {
+    //       var x = ds['point'].latitude;
+    //       print(x);
+    //     });
+
+    Firestore.instance
         .collection(db)
         .document('1')
         .collection('rutaida')
-        .document('1')
-        .get()
-        .then((DocumentSnapshot ds) {
-          var x = ds['point'].latitude;
-          print(x);
-        });
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach(
+        (f) {
+          print('lat: ${f.data['point'].latitude.toString()}');
+          print('lng: ${f.data['point'].longitude.toString()}');
+        },
+      );
+    });
   }
 
   void updateData() {

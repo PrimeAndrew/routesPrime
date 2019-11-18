@@ -15,24 +15,22 @@ class DirectionsProvider extends ChangeNotifier {
   Set<maps.Polyline> get currentRoute => _route;
 
   // var way = <Waypoint>[];
-    // Firestore.instance
-    //     .collection(db)
-    //     .document('1')
-    //     .collection('rutaida')
-    //     .document('1')
-    //     .get()
-    //     .then(
-    //   (DocumentSnapshot ds) async{
-    //     v1 = ds['point'].latitude.toString();
-    //     v2 = ds['point'].longitude.toString();
-    //     way.add(new Waypoint('via:$v1%2C$v2'));
-    //     print("lat: " + v1);
-    //     print("lng: " + v2);
-    //     print(way[0]);
-    //   },
-    // );
-
-  
+  // Firestore.instance
+  //     .collection(db)
+  //     .document('1')
+  //     .collection('rutaida')
+  //     .document('1')
+  //     .get()
+  //     .then(
+  //   (DocumentSnapshot ds) async{
+  //     v1 = ds['point'].latitude.toString();
+  //     v2 = ds['point'].longitude.toString();
+  //     way.add(new Waypoint('via:$v1%2C$v2'));
+  //     print("lat: " + v1);
+  //     print("lng: " + v2);
+  //     print(way[0]);
+  //   },
+  // );
 
   findDirectons(maps.LatLng from, maps.LatLng to, List<Waypoint> way) async {
     var origin = Location(from.latitude, from.longitude);
@@ -71,29 +69,44 @@ class DirectionsProvider extends ChangeNotifier {
     }
 
     print(result.toString());
-
   }
 
-  getData()async{
+  getData() async {
     var way = <Waypoint>[];
+
     await Firestore.instance
         .collection(db)
         .document('1')
         .collection('rutaida')
-        .document('1')
-        .get()
-        .then(
-      (DocumentSnapshot ds) {
-        v1 = ds['point'].latitude.toString();
-        v2 = ds['point'].longitude.toString();
-        way.add(new Waypoint('via:$v1%2C$v2'));
-        // val = 'via:$v1%2C$v2';
-        print('777777777777777777777777777777777');
-        // print("lat: " + v1);
-        // print("lng: " + v2);
-        // print(way[0]);
-      },
-    );
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach(
+        (f) {
+          v1 = '${f.data['point'].latitude.toString()}';
+          v2 = '${f.data['point'].longitude.toString()}';
+          way.add(new Waypoint('via:$v1%2C$v2'));
+        },
+      );
+    });
+
+    // await Firestore.instance
+    //     .collection(db)
+    //     .document('1')
+    //     .collection('rutaida')
+    //     .document('1')
+    //     .get()
+    //     .then(
+    //   (DocumentSnapshot ds) {
+    //     v1 = ds['point'].latitude.toString();
+    //     v2 = ds['point'].longitude.toString();
+    //     way.add(new Waypoint('via:$v1%2C$v2'));
+    //     // val = 'via:$v1%2C$v2';
+    //     print('777777777777777777777777777777777');
+    //     // print("lat: " + v1);
+    //     // print("lng: " + v2);
+    //     // print(way[0]);
+    //   },
+    //);
     return way;
   }
 }
