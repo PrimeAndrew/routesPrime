@@ -1,30 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as maps;
 import 'package:google_maps_webservice/directions.dart';
-
-//import 'package:http/http.dart' as http;
-
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DirectionsProvider extends ChangeNotifier {
+  final databaseReference = Firestore.instance;
+  final db = 'zapp2';
+  static String v1;
+  static String v2;
+
   GoogleMapsDirections directionsApi =
       GoogleMapsDirections(apiKey: 'AIzaSyDMOOwylpSGWL8CBIKlNLFnh_3dDOtDS0g');
   Set<maps.Polyline> _route = Set();
-
-
   Set<maps.Polyline> get currentRoute => _route;
 
-  static double v1 = -16.506000;
+  // var way = <Waypoint>[];
+    // Firestore.instance
+    //     .collection(db)
+    //     .document('1')
+    //     .collection('rutaida')
+    //     .document('1')
+    //     .get()
+    //     .then(
+    //   (DocumentSnapshot ds) async{
+    //     v1 = ds['point'].latitude.toString();
+    //     v2 = ds['point'].longitude.toString();
+    //     way.add(new Waypoint('via:$v1%2C$v2'));
+    //     print("lat: " + v1);
+    //     print("lng: " + v2);
+    //     print(way[0]);
+    //   },
+    // );
 
-  var way = <Waypoint> [
-    new Waypoint('via:$v1%2C-68.139742'),
-    new Waypoint('via:-16.506134%2C-68.141026'),
-  ];
+  
 
-//-16.503167, -68.137649
-  findDirectons(maps.LatLng from, maps.LatLng to) async {
+  findDirectons(maps.LatLng from, maps.LatLng to, List<Waypoint> way) async {
     var origin = Location(from.latitude, from.longitude);
     var destination = Location(to.latitude, to.longitude);
+    print("hola");
 
     var result = await directionsApi.directionsWithLocation(
       origin,
@@ -32,10 +45,6 @@ class DirectionsProvider extends ChangeNotifier {
       travelMode: TravelMode.driving,
       waypoints: way,
     );
-    // http.Response result = await http.get(
-    //     'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&key=API_KEY');
-  // final result =
-  //         await http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&key=API_KEY');
 
     Set<maps.Polyline> newRoute = Set();
 
@@ -62,5 +71,29 @@ class DirectionsProvider extends ChangeNotifier {
     }
 
     print(result.toString());
+
+  }
+
+  getData()async{
+    var way = <Waypoint>[];
+    await Firestore.instance
+        .collection(db)
+        .document('1')
+        .collection('rutaida')
+        .document('1')
+        .get()
+        .then(
+      (DocumentSnapshot ds) {
+        v1 = ds['point'].latitude.toString();
+        v2 = ds['point'].longitude.toString();
+        way.add(new Waypoint('via:$v1%2C$v2'));
+        // val = 'via:$v1%2C$v2';
+        print('777777777777777777777777777777777');
+        // print("lat: " + v1);
+        // print("lng: " + v2);
+        // print(way[0]);
+      },
+    );
+    return way;
   }
 }

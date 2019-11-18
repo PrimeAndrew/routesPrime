@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'directions_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:google_maps_webservice/directions.dart' as webs;
 
 class RouteScreen extends StatefulWidget {
   // final LatLng fromPoint = LatLng(-16.505641, -68.136560);
@@ -22,6 +23,9 @@ class _RouteScreenState extends State<RouteScreen> {
   GoogleMapController _mapController;
   BitmapDescriptor customIcon;
   Set<Marker> markers;
+  var way = <webs.Waypoint>[];
+
+
   @override
   void initState() {
     super.initState();
@@ -75,11 +79,13 @@ Set<Marker> _createMarkers() {
     return tmp;
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) async{
     _mapController = controller;
     _centerView();
     var api = Provider.of<DirectionsProvider>(context);
-    api.findDirectons(widget.fromPoint, widget.toPoint)();
+    way = await api.getData();
+    // way.add(new webs.Waypoint(val));
+    api.findDirectons(widget.fromPoint, widget.toPoint, way)();
   }
 
   _centerView() async {
