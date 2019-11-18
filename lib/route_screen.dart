@@ -80,12 +80,21 @@ Set<Marker> _createMarkers() {
   }
 
   void _onMapCreated(GoogleMapController controller) async{
+    LatLng fromPointNear;
+    LatLng toPointNear;
     _mapController = controller;
     _centerView();
     var api = Provider.of<DirectionsProvider>(context);
-    way = await api.getData();
-    // way.add(new webs.Waypoint(val));
-    api.findDirectons(widget.fromPoint, widget.toPoint, way)();
+    
+    fromPointNear = await api.getToPointNear(widget.fromPoint);
+    toPointNear = await api.getToPointNear(widget.toPoint);
+    print('Near: $fromPointNear.latitude, $fromPointNear.longitude'); 
+    way = await api.getData(fromPointNear);
+    // for (int i = 0; i < way.length; i++) {
+    //   print('hjhj');
+    //   print(way[i]);
+    // }
+    api.findDirectons(fromPointNear, toPointNear, way)();
   }
 
   _centerView() async {
@@ -109,6 +118,7 @@ Set<Marker> _createMarkers() {
       southwest: LatLng(left, bottom),
       northeast: LatLng(right, top),
     );
+
     var cameraUpdate = CameraUpdate.newLatLngBounds(bounds, 50);
     _mapController.animateCamera(cameraUpdate);
   }

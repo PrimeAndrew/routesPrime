@@ -36,7 +36,7 @@ class _ToPointState extends State<ToPoint> {
           print(pos);
 
           Marker m = Marker(
-            markerId: MarkerId('1'),
+            markerId: MarkerId('2'),
             icon: customIcon,
             position: pos,
           );
@@ -45,9 +45,19 @@ class _ToPointState extends State<ToPoint> {
           });
           positionTo = pos;
         },
-        onMapCreated: (GoogleMapController controller) {},
+        onMapCreated: (GoogleMapController controller) {
+
+          Marker m = Marker(
+            markerId: MarkerId('1'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(120.0),
+            position: widget.posFrom,
+          );
+          setState(() {
+            markers.add(m);
+          });
+        },
         initialCameraPosition: CameraPosition(
-          target: LatLng(-16.5, -68.1500015),
+          target: LatLng(widget.posFrom.latitude, widget.posFrom.longitude),
           zoom: 18,
         ),
       ),

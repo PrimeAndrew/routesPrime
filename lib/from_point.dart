@@ -44,7 +44,8 @@ class _FromPointState extends State<FromPoint> {
         },
         onMapCreated: (GoogleMapController controller) {},
         initialCameraPosition: CameraPosition(
-          target: LatLng(-16.5, -68.1500015),
+          // target: LatLng(-16.5, -68.1500015),
+          target: LatLng(-16.522815, -68.111820),
           zoom: 18,
         ),
       ),

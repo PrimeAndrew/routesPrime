@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
 
 class Prueba extends StatefulWidget {
   // final LatLng cad1;
@@ -108,17 +109,19 @@ class _PruebaState extends State<Prueba> {
     //       var x = ds['point'].latitude;
     //       print(x);
     //     });
-
+    var c = 1;
     Firestore.instance
         .collection(db)
-        .document('1')
+        .document('2')
         .collection('rutaida')
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach(
         (f) {
+          print(c);
           print('lat: ${f.data['point'].latitude.toString()}');
           print('lng: ${f.data['point'].longitude.toString()}');
+          c++;
         },
       );
     });
@@ -140,6 +143,30 @@ class _PruebaState extends State<Prueba> {
       databaseReference.collection(db).document('1').delete();
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  void radioLine() {
+    var centerPointlat = -16.507162;
+    var centerPointlng = -68.136556;
+
+//   var checkPointlat = -16.506766;
+//   var checkPointlng = -68.136754;
+
+    var checkPointlat = -16.506709;
+    var checkPointlng = -68.136832;
+
+    var m = 50;
+    var km = m / 1000;
+    var ky = 40000 / 360;
+    var kx = cos(pi * centerPointlat / 180.0) * ky;
+    var dx = (centerPointlng - checkPointlng).abs() * kx;
+    var dy = (centerPointlat - checkPointlat).abs() * ky;
+
+    if (sqrt(dx * dx + dy * dy) <= km) {
+      print('Yes');
+    } else {
+      print('no');
     }
   }
 }
