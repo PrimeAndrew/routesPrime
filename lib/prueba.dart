@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 
+import 'listMini.dart';
+
 class Prueba extends StatefulWidget {
   // final LatLng cad1;
   // final LatLng cad2;
@@ -49,6 +51,17 @@ class _PruebaState extends State<Prueba> {
             onPressed: () {
               deleteData();
             },
+          ),
+          RaisedButton(
+            child: Text('List'),
+            onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ListMini(),
+            ),
+          );
+        },
           ),
         ],
       )), //center
