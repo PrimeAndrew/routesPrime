@@ -116,27 +116,27 @@ class DirectionsProvider extends ChangeNotifier {
         },
       );
     });
-
-    // await Firestore.instance
-    //     .collection(db)
-    //     .document('1')
-    //     .collection('rutaida')
-    //     .document('1')
-    //     .get()
-    //     .then(
-    //   (DocumentSnapshot ds) {
-    //     v1 = ds['point'].latitude.toString();
-    //     v2 = ds['point'].longitude.toString();
-    //     way.add(new Waypoint('via:$v1%2C$v2'));
-    //     // val = 'via:$v1%2C$v2';
-    //     print('777777777777777777777777777777777');
-    //     // print("lat: " + v1);
-    //     // print("lng: " + v2);
-    //     // print(way[0]);
-    //   },
-    //);
     return way;
   }
+  //---------------
+  // getppp(maps.LatLng point) async {
+  //   //var way = <Waypoint>[];
+  //   var i = 0;
+  //   var flag = 'no';
+
+  //   await Firestore.instance
+  //       .collection(db)
+  //       .where('point')
+  //       .then((QuerySnapshot snapshot) {
+  //     snapshot.documents.forEach(
+  //       (f) {
+          
+  //       },
+  //     );
+  //   });
+  //   return ;
+  // }
+  //---------------
 
   getToPointNear(maps.LatLng point) async {
     var centerPointlat = point.latitude;
@@ -239,4 +239,34 @@ class DirectionsProvider extends ChangeNotifier {
 
     return finalPoint;
   }
+  // findLines(maps.LatLng from, maps.LatLng to,) async {
+  //   var origin = Location(from.latitude, from.longitude);
+  //   var destination = Location(to.latitude, to.longitude);
+  //   print("hola2");
+
+
+  //   var result = await directionsApi.directionsWithLocation(
+  //     origin,
+  //     destination,
+  //     travelMode: TravelMode.driving,
+  //     //waypoints: way,
+  //   );
+
+  //   if (result.isOkay) {
+  //     var linea = result.routes[0];
+  //     var leg = route.legs[0];
+
+  //     List<maps.LatLng> points = [];
+
+  //     leg.steps.forEach((step) {
+  //       points.add(maps.LatLng(step.startLocation.lat, step.startLocation.lng));
+  //       points.add(maps.LatLng(step.endLocation.lat, step.endLocation.lng));
+  //     });
+
+     
+  //     notifyListeners();
+  //   }
+
+  //   print(result.toString());
+  // }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+//import 'package:zapp2/minibus.dart';
 import 'dart:math';
 
 import 'listMini.dart';
@@ -55,13 +57,19 @@ class _PruebaState extends State<Prueba> {
           RaisedButton(
             child: Text('List'),
             onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ListMini(),
-            ),
-          );
-        },
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ListMini(),
+                ),
+              );
+            },
+          ),
+          RaisedButton(
+            child: Text('encontrar'),
+            onPressed: () {
+              encontrar();
+            },
           ),
         ],
       )), //center
@@ -181,5 +189,47 @@ class _PruebaState extends State<Prueba> {
     } else {
       print('no');
     }
+  }
+
+  void encontrar() {
+    // final List<Minibus> datos = [
+    //   Minibus(
+    //     linea: '312',
+    //     tiempo: '30',
+    //     puntos: [LatLng(12, 21), LatLng(13, 31)],
+    //   ),
+    // ];
+    // var datoss = [
+    //   {
+    //     'linea': 'hola',
+    //     'puntos': [LatLng(12, 21), LatLng(13, 31)],
+    //   }
+    // ];
+    List<LatLng> puntosF = [];
+    print("f");
+
+    Firestore.instance.collection('zapp3').getDocuments().then(
+      (QuerySnapshot docs) {
+        docs.documents.forEach((f) {
+          // Minibus(
+          //   linea: f.documentID,
+          //   tiempo: '12',
+          //   puntos:
+          // );
+          //print(f.data.length);
+          for (int i =1 ;i<=f.data.length;i++) {
+            print("---------------");
+            print(i);
+            // print(f.data['$i'].latitude);
+            // print(f.data['$i'].longitude);
+            puntosF.add(LatLng(f.data['$i'].latitude,f.data['$i'].longitude));
+            // var t = f.data['1'];
+            // print(t);
+          }
+        });
+        print(puntosF);
+      },
+    );
+    
   }
 }

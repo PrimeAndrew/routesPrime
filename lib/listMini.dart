@@ -1,24 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:zapp2/minibus.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+//import 'package:provider/provider.dart';
+//import 'directions_provider.dart';
 
-class ListMini extends StatelessWidget {
+class ListMini extends StatefulWidget {
+  final LatLng posFrom;
+  final LatLng posTo;
+
+  const ListMini({this.posFrom, this.posTo});
+  @override
+  _ListMiniState createState() => _ListMiniState();
+}
+
+class _ListMiniState extends State<ListMini> {
   final List<Minibus> transactions = [
-    Minibus(
-      linea: '123',
-      tiempo: '50',
-    ),
-    Minibus(
-      linea: '456',
-      tiempo: '30',
-    ),
-    Minibus(
-      linea: '789',
-      tiempo: '30',
-    ),
   ];
 
-  //ListMini(this.transactions);
-  //ListMini();
+  void addNewTransaction() {
+    for (int i = 0; i <= 2; i++) {
+      final newTx = Minibus(
+        linea: '123',
+        tiempo: i.toString(),
+      );
+      setState(() {
+        transactions.add(newTx);
+      });
+    }
+  }
+  // void dbconec() async{
+  //   LatLng fromPointNear;
+  //   LatLng toPointNear;
+  //   var api = Provider.of<DirectionsProvider>(context);
+    
+
+  //   print('Near: $fromPointNear.latitude, $fromPointNear.longitude'); 
+  //   way = await api.getData(fromPointNear);
+  //   // for (int i = 0; i < way.length; i++) {
+  //   //   print('hjhj');
+  //   //   print(way[i]);
+  //   // }
+  //   api.findDirectons(fromPointNear, toPointNear, way)();
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +63,7 @@ class ListMini extends StatelessWidget {
                   ? Column(
                       children: <Widget>[
                         Text(
-                          'No transactions added yet',
+                          'No hay lineas',
                           style: Theme.of(context).textTheme.title,
                         ),
                         SizedBox(
@@ -92,6 +117,11 @@ class ListMini extends StatelessWidget {
             ),
           ],
         ),
+        
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => addNewTransaction(),
       ),
     );
   }

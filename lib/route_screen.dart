@@ -88,13 +88,18 @@ Set<Marker> _createMarkers() {
     
     fromPointNear = await api.getToPointNear(widget.fromPoint);
     toPointNear = await api.getToPointNear(widget.toPoint);
-    print('Near: $fromPointNear.latitude, $fromPointNear.longitude'); 
-    way = await api.getData(fromPointNear);
+    print('Near: $fromPointNear.latitude, $fromPointNear.longitude');
+    if (fromPointNear != null || toPointNear != null){
+       way = await api.getData(fromPointNear);
     // for (int i = 0; i < way.length; i++) {
     //   print('hjhj');
     //   print(way[i]);
     // }
     api.findDirectons(fromPointNear, toPointNear, way)();
+    }else{
+      print("nulo");
+    }
+   
   }
 
   _centerView() async {
