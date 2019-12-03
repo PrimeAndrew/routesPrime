@@ -3,6 +3,7 @@ import 'package:zapp2/minibus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:zapp2/route_screen.dart';
 import 'directions_provider.dart';
 
 class ListMini extends StatefulWidget {
@@ -24,11 +25,11 @@ class _ListMiniState extends State<ListMini> {
     LatLng posFinal = LatLng(0.0, 0.0);
     LatLng toPointNear;
     int flag = -1;
-
+    int cont = 0;
     Firestore.instance.collection('zapp3').getDocuments().then(
       (QuerySnapshot docs) {
         docs.documents.forEach((f) {
-          int cont = 0;
+          cont = 0;
           var api = Provider.of<DirectionsProvider>(context);
 
           puntosF = [];
@@ -67,9 +68,9 @@ class _ListMiniState extends State<ListMini> {
             setState(() {
               transactions.add(newTx);
             });
-           
           }
-           print('___________________________________________________');
+          flag = -1;
+          print('___________________________________________________');
           //print(puntosF);
         });
         // print(transactions);
@@ -132,19 +133,6 @@ class _ListMiniState extends State<ListMini> {
                     )
                   : ListView.builder(
                       itemBuilder: (ctx, index) {
-                        //----------
-                        // nearPoint();
-                        //   if (fromPointNear != null || toPointNear != null) {
-                        //     print("OOOOOOOOOOOOOOOOOOOOOOOOOKKKKKKKKKKKKKKKKKKK");
-                        //     // way = api.getData(fromPointNear);
-                        //     // for (int i = 0; i < way.length; i++) {
-                        //     //   print('hjhj');
-                        //     //   print(way[i]);
-                        //     // }
-                        //     // api.findDirectons(fromPointNear, toPointNear, way)();
-                        //   } else {
-                        //     print("nulo");
-                        //   }
                         return Card(
                           margin: EdgeInsets.symmetric(
                             vertical: 8,
@@ -171,7 +159,18 @@ class _ListMiniState extends State<ListMini> {
                                 color: Theme.of(context).primaryColorLight,
                               ),
                               //onPressed: () => deleteTx(transactions[index].id),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RouteScreen(
+                                      toPoint: widget.posTo,
+                                      fromPoint: widget.posFrom,
+                                      points: transactions[index].puntos,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         );

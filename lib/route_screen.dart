@@ -12,8 +12,9 @@ class RouteScreen extends StatefulWidget {
 
   final LatLng fromPoint;
   final LatLng toPoint;
+  final List<LatLng> points;
 
-  RouteScreen({this.fromPoint, this.toPoint});
+  RouteScreen({this.fromPoint, this.toPoint, this.points});
 
   @override
   _RouteScreenState createState() => _RouteScreenState();
@@ -24,7 +25,6 @@ class _RouteScreenState extends State<RouteScreen> {
   BitmapDescriptor customIcon;
   Set<Marker> markers;
   var way = <webs.Waypoint>[];
-
 
   @override
   void initState() {
@@ -59,7 +59,8 @@ class _RouteScreenState extends State<RouteScreen> {
       ),
     );
   }
-Set<Marker> _createMarkers() {
+
+  Set<Marker> _createMarkers() {
     var tmp = Set<Marker>();
     tmp.add(Marker(
       markerId: MarkerId('fromPoint'),
@@ -78,28 +79,37 @@ Set<Marker> _createMarkers() {
     ));
     return tmp;
   }
+  // codigo antiguo funcional
+  // void _onMapCreated(GoogleMapController controller) async{
+  //   LatLng fromPointNear;
+  //   LatLng toPointNear;
+  //   _mapController = controller;
+  //   _centerView();
+  //   var api = Provider.of<DirectionsProvider>(context);
 
-  void _onMapCreated(GoogleMapController controller) async{
-    LatLng fromPointNear;
-    LatLng toPointNear;
+  //   fromPointNear = await api.getPointNear(widget.fromPoint);
+  //   toPointNear = await api.getPointNear(widget.toPoint);
+  //   print('Near: $fromPointNear, $toPointNear');
+  //   if (fromPointNear != null && toPointNear != null){
+  //      way = await api.getData(fromPointNear);
+  //   // for (int i = 0; i < way.length; i++) {
+  //   //   print('hjhj');
+  //   //   print(way[i]);
+  //   // }
+  //   api.findDirectons(fromPointNear, toPointNear, way)();
+  //   }else{
+  //     print("nulo");
+  //   }
+
+  // }
+  void _onMapCreated(GoogleMapController controller) async {
+    LatLng fromPointNear = widget.fromPoint;
+    LatLng toPointNear = widget.toPoint;
     _mapController = controller;
     _centerView();
     var api = Provider.of<DirectionsProvider>(context);
-    
-    fromPointNear = await api.getPointNear(widget.fromPoint);
-    toPointNear = await api.getPointNear(widget.toPoint);
-    print('Near: $fromPointNear, $toPointNear');
-    if (fromPointNear != null && toPointNear != null){
-       way = await api.getData(fromPointNear);
-    // for (int i = 0; i < way.length; i++) {
-    //   print('hjhj');
-    //   print(way[i]);
-    // }
-    api.findDirectons(fromPointNear, toPointNear, way)();
-    }else{
-      print("nulo");
-    }
-   
+    print(widget.points);
+    api.findDirectons(fromPointNear, toPointNear, widget.points)();
   }
 
   _centerView() async {
@@ -112,7 +122,7 @@ Set<Marker> _createMarkers() {
     var top = max(widget.fromPoint.longitude, widget.toPoint.longitude);
     var bottom = min(widget.fromPoint.longitude, widget.toPoint.longitude);
 
-    api.currentRoute.first.points.forEach((point){
+    api.currentRoute.first.points.forEach((point) {
       left = min(left, point.latitude);
       right = max(right, point.latitude);
       top = max(top, point.longitude);
@@ -127,7 +137,4 @@ Set<Marker> _createMarkers() {
     var cameraUpdate = CameraUpdate.newLatLngBounds(bounds, 50);
     _mapController.animateCamera(cameraUpdate);
   }
-
-
-
 }

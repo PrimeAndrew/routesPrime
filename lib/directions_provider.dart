@@ -15,6 +15,7 @@ class DirectionsProvider extends ChangeNotifier {
   Set<maps.Polyline> _route = Set();
   Set<maps.Polyline> get currentRoute => _route;
 
+  
   // var way = <Waypoint>[];
   // Firestore.instance
   //     .collection(db)
@@ -33,7 +34,55 @@ class DirectionsProvider extends ChangeNotifier {
   //   },
   // );
 
-  findDirectons(maps.LatLng from, maps.LatLng to, List<Waypoint> way) async {
+
+  // codigo findirections original funcional
+  // findDirectons(maps.LatLng from, maps.LatLng to, List<Waypoint> way) async {
+  //   var origin = Location(from.latitude, from.longitude);
+  //   var destination = Location(to.latitude, to.longitude);
+  //   print("hola");
+
+  //   // for (int i = 0; i < way.length; i++) {
+  //   //   print('hjhj');
+  //   // //   print(way[i]);
+  //   // }
+
+  //   var result = await directionsApi.directionsWithLocation(
+  //     origin,
+  //     destination,
+  //     travelMode: TravelMode.driving,
+  //     //waypoints: way,
+  //   );
+
+  //   Set<maps.Polyline> newRoute = Set();
+
+  //   if (result.isOkay) {
+  //     var route = result.routes[0];
+  //     var leg = route.legs[0];
+
+  //     List<maps.LatLng> points = [];
+
+  //     leg.steps.forEach((step) {
+  //       points.add(maps.LatLng(step.startLocation.lat, step.startLocation.lng));
+  //       points.add(maps.LatLng(step.endLocation.lat, step.endLocation.lng));
+  //     });
+
+  //     var line = maps.Polyline(
+  //       // geodesic: true,
+  //       // visible: true,
+  //       points: points,
+  //       polylineId: maps.PolylineId('Ruta'),
+  //       color: Colors.orange,
+  //       width: 4,
+  //     );
+  //     newRoute.add(line);
+  //     _route = newRoute;
+  //     notifyListeners();
+  //   }
+
+  //   print(result.toString());
+  // }
+
+  findDirectons(maps.LatLng from, maps.LatLng to, List<maps.LatLng> points) async {
     var origin = Location(from.latitude, from.longitude);
     var destination = Location(to.latitude, to.longitude);
     print("hola");
@@ -53,15 +102,15 @@ class DirectionsProvider extends ChangeNotifier {
     Set<maps.Polyline> newRoute = Set();
 
     if (result.isOkay) {
-      var route = result.routes[0];
-      var leg = route.legs[0];
+      // var route = result.routes[0];
+      // var leg = route.legs[0];
 
-      List<maps.LatLng> points = [];
+      //List<maps.LatLng> points = [];
 
-      leg.steps.forEach((step) {
-        points.add(maps.LatLng(step.startLocation.lat, step.startLocation.lng));
-        points.add(maps.LatLng(step.endLocation.lat, step.endLocation.lng));
-      });
+      // leg.steps.forEach((step) {
+      //   points.add(maps.LatLng(step.startLocation.lat, step.startLocation.lng));
+      //   points.add(maps.LatLng(step.endLocation.lat, step.endLocation.lng));
+      // });
 
       var line = maps.Polyline(
         // geodesic: true,
@@ -118,6 +167,7 @@ class DirectionsProvider extends ChangeNotifier {
     });
     return way;
   }
+
 
   getPointNear(maps.LatLng point) async {
     var centerPointlat = point.latitude;
