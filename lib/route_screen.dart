@@ -86,10 +86,10 @@ Set<Marker> _createMarkers() {
     _centerView();
     var api = Provider.of<DirectionsProvider>(context);
     
-    fromPointNear = await api.getToPointNear(widget.fromPoint);
-    toPointNear = await api.getToPointNear(widget.toPoint);
-    print('Near: $fromPointNear.latitude, $fromPointNear.longitude');
-    if (fromPointNear != null || toPointNear != null){
+    fromPointNear = await api.getPointNear(widget.fromPoint);
+    toPointNear = await api.getPointNear(widget.toPoint);
+    print('Near: $fromPointNear, $toPointNear');
+    if (fromPointNear != null && toPointNear != null){
        way = await api.getData(fromPointNear);
     // for (int i = 0; i < way.length; i++) {
     //   print('hjhj');

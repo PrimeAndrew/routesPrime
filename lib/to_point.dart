@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:zapp2/listMini.dart';
 import 'package:zapp2/route_screen.dart';
 
 class ToPoint extends StatefulWidget {
@@ -71,9 +72,13 @@ class _ToPointState extends State<ToPoint> {
               //   fromPoint: widget.posFrom,
               //   toPoint: position,
               // ),
-              builder: (context) => RouteScreen(
-                toPoint: positionTo,
-                fromPoint: widget.posFrom,
+              // builder: (context) => RouteScreen(
+              //   toPoint: positionTo,
+              //   fromPoint: widget.posFrom,
+              // ),
+              builder: (context) => ListMini(
+                posTo: positionTo,
+                posFrom: widget.posFrom,
               ),
             ),
           );

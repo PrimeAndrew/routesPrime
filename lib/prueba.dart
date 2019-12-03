@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zapp2/minibus.dart';
-//import 'package:zapp2/minibus.dart';
 import 'dart:math';
 
 import 'listMini.dart';
@@ -193,21 +192,8 @@ class _PruebaState extends State<Prueba> {
   }
 
   void encontrar() {
-    final List<Minibus> datos = [
-      //   Minibus(
-      //     linea: '312',
-      //     tiempo: '30',
-      //     puntos: [LatLng(12, 21), LatLng(13, 31)],
-      //   ),
-      // ];
-      // var datoss = [
-      //   {
-      //     'linea': 'hola',
-      //     'puntos': [LatLng(12, 21), LatLng(13, 31)],
-      //   }
-    ];
+    final List<Minibus> datos = [];
     List<LatLng> puntosF = [];
-    print("f");
 
     Firestore.instance.collection('zapp3').getDocuments().then(
       (QuerySnapshot docs) {
@@ -222,7 +208,6 @@ class _PruebaState extends State<Prueba> {
             puntosF.add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
             // var t = f.data['1'];
             // print(t);
-
           }
           datos.add(
             Minibus(
@@ -231,10 +216,9 @@ class _PruebaState extends State<Prueba> {
               puntos: puntosF,
             ),
           );
-          // print(puntosF);
-          
+          //print(puntosF);
         });
-        // print(datos[1].linea);
+        print(datos[1].puntos[0]);
       },
     );
   }

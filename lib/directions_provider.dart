@@ -118,27 +118,8 @@ class DirectionsProvider extends ChangeNotifier {
     });
     return way;
   }
-  //---------------
-  // getppp(maps.LatLng point) async {
-  //   //var way = <Waypoint>[];
-  //   var i = 0;
-  //   var flag = 'no';
 
-  //   await Firestore.instance
-  //       .collection(db)
-  //       .where('point')
-  //       .then((QuerySnapshot snapshot) {
-  //     snapshot.documents.forEach(
-  //       (f) {
-          
-  //       },
-  //     );
-  //   });
-  //   return ;
-  // }
-  //---------------
-
-  getToPointNear(maps.LatLng point) async {
+  getPointNear(maps.LatLng point) async {
     var centerPointlat = point.latitude;
     var centerPointlng = point.longitude;
     var checkPointlat = 0.0;
@@ -158,6 +139,7 @@ class DirectionsProvider extends ChangeNotifier {
           // v2 = '${f.data['point'].longitude.toString()}';
           checkPointlat = f.data['point'].latitude;
           checkPointlng = f.data['point'].longitude;
+          //print("test:"+checkPointlat.toString()+" - "+checkPointlng.toString());
           var m = 50;
           var km = m / 1000;
           var ky = 40000 / 360;
@@ -174,76 +156,78 @@ class DirectionsProvider extends ChangeNotifier {
         },
       );
     });
-
     return finalPoint;
-//     var centerPointlat = -16.507162;
-//     var centerPointlng = -68.136556;
-
-// //   var checkPointlat = -16.506766;
-// //   var checkPointlng = -68.136754;
-
-//     var checkPointlat = -16.506709;
-//     var checkPointlng = -68.136832;
-
-//     var m = 50;
-//     var km = m / 1000;
-//     var ky = 40000 / 360;
-//     var kx = cos(pi * centerPointlat / 180.0) * ky;
-//     var dx = (centerPointlng - checkPointlng).abs() * kx;
-//     var dy = (centerPointlat - checkPointlat).abs() * ky;
-
-//     if (sqrt(dx * dx + dy * dy) <= km) {
-//       print('Yes');
-//     } else {
-//       print('no');
-//     }
-//     return ;
   }
 
-  getFromPointNear(maps.LatLng point) async {
+  getFromPointNear2(maps.LatLng point, maps.LatLng pointCheck){
     var centerPointlat = point.latitude;
     var centerPointlng = point.longitude;
-    var checkPointlat = 0.0;
-    var checkPointlng = 0.0;
-    var max = -100.0;
+    var checkPointlat = pointCheck.latitude;
+    var checkPointlng = pointCheck.longitude;
+    var min = 100000000.0;
     maps.LatLng finalPoint;
 
-    await Firestore.instance
-        .collection(db)
-        .document('2')
-        .collection('rutaida')
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach(
-        (f) {
-          // v1 = '${f.data['point'].latitude.toString()}';
-          // v2 = '${f.data['point'].longitude.toString()}';
-          checkPointlat = f.data['point'].latitude;
-          checkPointlng = f.data['point'].longitude;
-          var m = 50;
-          var km = m / 1000;
-          var ky = 40000 / 360;
-          var kx = cos(pi * centerPointlat / 180.0) * ky;
-          var dx = (centerPointlng - checkPointlng).abs() * kx;
-          var dy = (centerPointlat - checkPointlat).abs() * ky;
-          var dm = sqrt(dx * dx + dy * dy);
-          if (dm >= km && dm >= max) {
-            max = dm;
-            finalPoint = maps.LatLng(checkPointlat, checkPointlng);
-          }
+    var m = 50;
+    var km = m / 1000;
+    var ky = 40000 / 360;
+    var kx = cos(pi * centerPointlat / 180.0) * ky;
+    var dx = (centerPointlng - checkPointlng).abs() * kx;
+    var dy = (centerPointlat - checkPointlat).abs() * ky;
+    var dm = sqrt(dx * dx + dy * dy);
 
-          // way.add(new Waypoint('via:$v1%2C$v2'));
-        },
-      );
-    });
+    if (dm <= km && dm <= min) {
+      min = dm;
+      finalPoint = maps.LatLng(checkPointlat, checkPointlng);
+    }
+
+    // way.add(new Waypoint('via:$v1%2C$v2'));
 
     return finalPoint;
   }
+
+  // getFromPointNear(maps.LatLng point) async {
+  //   var centerPointlat = point.latitude;
+  //   var centerPointlng = point.longitude;
+  //   var checkPointlat = 0.0;
+  //   var checkPointlng = 0.0;
+  //   var max = -100.0;
+  //   maps.LatLng finalPoint;
+
+  //   await Firestore.instance
+  //       .collection(db)
+  //       .document('2')
+  //       .collection('rutaida')
+  //       .getDocuments()
+  //       .then((QuerySnapshot snapshot) {
+  //     snapshot.documents.forEach(
+  //       (f) {
+  //         // v1 = '${f.data['point'].latitude.toString()}';
+  //         // v2 = '${f.data['point'].longitude.toString()}';
+  //         checkPointlat = f.data['point'].latitude;
+  //         checkPointlng = f.data['point'].longitude;
+  //         var m = 50;
+  //         var km = m / 1000;
+  //         var ky = 40000 / 360;
+  //         var kx = cos(pi * centerPointlat / 180.0) * ky;
+  //         var dx = (centerPointlng - checkPointlng).abs() * kx;
+  //         var dy = (centerPointlat - checkPointlat).abs() * ky;
+  //         var dm = sqrt(dx * dx + dy * dy);
+  //         if (dm >= km && dm >= max) {
+  //           max = dm;
+  //           finalPoint = maps.LatLng(checkPointlat, checkPointlng);
+  //         }
+
+  //         // way.add(new Waypoint('via:$v1%2C$v2'));
+  //       },
+  //     );
+  //   });
+
+  //   return finalPoint;
+  // }
   // findLines(maps.LatLng from, maps.LatLng to,) async {
   //   var origin = Location(from.latitude, from.longitude);
   //   var destination = Location(to.latitude, to.longitude);
   //   print("hola2");
-
 
   //   var result = await directionsApi.directionsWithLocation(
   //     origin,
@@ -263,7 +247,6 @@ class DirectionsProvider extends ChangeNotifier {
   //       points.add(maps.LatLng(step.endLocation.lat, step.endLocation.lng));
   //     });
 
-     
   //     notifyListeners();
   //   }
 

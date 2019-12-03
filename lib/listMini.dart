@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:zapp2/minibus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-//import 'package:provider/provider.dart';
-//import 'directions_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'directions_provider.dart';
 
 class ListMini extends StatefulWidget {
   final LatLng posFrom;
@@ -14,35 +15,87 @@ class ListMini extends StatefulWidget {
 }
 
 class _ListMiniState extends State<ListMini> {
-  final List<Minibus> transactions = [
-  ];
+  final List<Minibus> transactions = [];
 
   void addNewTransaction() {
-    for (int i = 0; i <= 2; i++) {
-      final newTx = Minibus(
-        linea: '123',
-        tiempo: i.toString(),
-      );
-      setState(() {
-        transactions.add(newTx);
-      });
-    }
+    List<LatLng> puntosF = [];
+
+    LatLng fromPointNear;
+    LatLng posFinal = LatLng(0.0, 0.0);
+    LatLng toPointNear;
+    int flag = -1;
+
+    Firestore.instance.collection('zapp3').getDocuments().then(
+      (QuerySnapshot docs) {
+        docs.documents.forEach((f) {
+          int cont = 0;
+          var api = Provider.of<DirectionsProvider>(context);
+
+          puntosF = [];
+          for (int i = 1; i <= f.data.length; i++) {
+            print(f.data['$i'].latitude.toString() +
+                '|${f.documentID}|' +
+                f.data['$i'].longitude.toString());
+            posFinal = LatLng(f.data['$i'].latitude, f.data['$i'].longitude);
+            // print(posFromFinal);
+            fromPointNear = api.getFromPointNear2(widget.posFrom, posFinal);
+            toPointNear = api.getFromPointNear2(widget.posTo, posFinal);
+            // print('$toPointNear');
+            print('Near: $fromPointNear , $toPointNear, $flag');
+
+            if (fromPointNear != null || toPointNear != null) {
+              cont++;
+              print('puntoP------------');
+              flag *= -1;
+              puntosF
+                  .add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
+            } else {
+              if (flag == 1) {
+                print('puntoM------------');
+                puntosF
+                    .add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
+              }
+            }
+          }
+          if (puntosF.isNotEmpty && cont == 2) {
+            print(puntosF);
+            final newTx = Minibus(
+              linea: f.documentID,
+              tiempo: '12',
+              puntos: puntosF,
+            );
+            setState(() {
+              transactions.add(newTx);
+            });
+           
+          }
+           print('___________________________________________________');
+          //print(puntosF);
+        });
+        // print(transactions);
+      },
+    );
   }
-  // void dbconec() async{
+
+  // void nearPoint() async {
   //   LatLng fromPointNear;
   //   LatLng toPointNear;
+
   //   var api = Provider.of<DirectionsProvider>(context);
-    
 
-  //   print('Near: $fromPointNear.latitude, $fromPointNear.longitude'); 
-  //   way = await api.getData(fromPointNear);
-  //   // for (int i = 0; i < way.length; i++) {
-  //   //   print('hjhj');
-  //   //   print(way[i]);
+  //   // fromPointNear = await api.getToPointNear2(widget.posFrom);
+  //   toPointNear = await api.getToPointNear2(
+  //     widget.posTo,
+  //   );
+  //   print('Near: $fromPointNear.latitude, $fromPointNear.longitude');
+  //   // if (fromPointNear != null || toPointNear != null){
+  //   //   //  way = await api.getData(fromPointNear);
+
+  //   // // api.findDirectons(fromPointNear, toPointNear, way)();
+  //   // }else{
+  //   //   print("nulo");
   //   // }
-  //   api.findDirectons(fromPointNear, toPointNear, way)();
   // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +132,19 @@ class _ListMiniState extends State<ListMini> {
                     )
                   : ListView.builder(
                       itemBuilder: (ctx, index) {
+                        //----------
+                        // nearPoint();
+                        //   if (fromPointNear != null || toPointNear != null) {
+                        //     print("OOOOOOOOOOOOOOOOOOOOOOOOOKKKKKKKKKKKKKKKKKKK");
+                        //     // way = api.getData(fromPointNear);
+                        //     // for (int i = 0; i < way.length; i++) {
+                        //     //   print('hjhj');
+                        //     //   print(way[i]);
+                        //     // }
+                        //     // api.findDirectons(fromPointNear, toPointNear, way)();
+                        //   } else {
+                        //     print("nulo");
+                        //   }
                         return Card(
                           margin: EdgeInsets.symmetric(
                             vertical: 8,
@@ -117,10 +183,9 @@ class _ListMiniState extends State<ListMini> {
             ),
           ],
         ),
-        
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(Icons.loop),
         onPressed: () => addNewTransaction(),
       ),
     );
