@@ -20,7 +20,6 @@ class _ListMiniTestState extends State<ListMiniTest> {
   void addNewTransaction() async {
     List<LatLng> puntosF = [];
 
-    String time;
     await Firestore.instance.collection('zapp3').getDocuments().then(
       (QuerySnapshot docs) async {
         docs.documents.forEach((f) async {
@@ -44,13 +43,13 @@ class _ListMiniTestState extends State<ListMiniTest> {
 
             puntosF.add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
           }
-         print(puntosF);
-        //  time = await api.findTime(fromPoint, toPoint);
-        //   print(time);
+          print(puntosF);
+          //  time = await api.findTime(fromPoint, toPoint);
+          //   print(time);
 
           final newTx = Minibus(
             linea: f.documentID,
-            tiempo: time,
+            tiempo: (f.data.length / 2).toString(),
             puntos: puntosF,
           );
           setState(() {
@@ -73,7 +72,7 @@ class _ListMiniTestState extends State<ListMiniTest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.purple,
         title: Text(
           'Flutter App',
         ),
@@ -111,23 +110,25 @@ class _ListMiniTestState extends State<ListMiniTest> {
                           ),
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundImage: NetworkImage('http://www.thevacollective.com/wp-content/uploads/2017/07/Road-Icon-Homepage-260x260.png'),
+                              backgroundColor: Colors.deepPurple,
+                              backgroundImage: NetworkImage(
+                                  'http://www.thevacollective.com/wp-content/uploads/2017/07/Road-Icon-Homepage-260x260.png'),
                               radius: 30,
                               child: Padding(
                                 padding: const EdgeInsets.all(5),
-                                child: FittedBox(
-                                  
-                                ),
+                                child: FittedBox(),
                               ),
                             ),
                             title: Text(
                               'Linea: ${transactions[index].linea}',
                               style: Theme.of(context).textTheme.title,
                             ),
+                            subtitle: Text(
+                                'Tiempo estimado: ${transactions[index].tiempo} mins'),
                             trailing: IconButton(
                               icon: Icon(
                                 Icons.map,
-                                color: Theme.of(context).primaryColorLight,
+                                color: Colors.purpleAccent,
                               ),
                               //onPressed: () => deleteTx(transactions[index].id),
                               onPressed: () {
@@ -140,8 +141,12 @@ class _ListMiniTestState extends State<ListMiniTest> {
                                   MaterialPageRoute(
                                     builder: (context) => RouteScreen(
                                       fromPoint: transactions[index].puntos[0],
-                                      toPoint: transactions[index].puntos[transactions[index].puntos.length-1],
+                                      toPoint: transactions[index].puntos[
+                                          transactions[index].puntos.length -
+                                              1],
                                       points: transactions[index].puntos,
+                                      linea: transactions[index].linea,
+                                      tiempo: transactions[index].tiempo,
                                     ),
                                   ),
                                 );
@@ -158,10 +163,10 @@ class _ListMiniTestState extends State<ListMiniTest> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.loop),
-        onPressed: () => addNewTransaction(),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.loop),
+      //   onPressed: () => addNewTransaction(),
+      // ),
     );
   }
 }
