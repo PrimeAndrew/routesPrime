@@ -17,20 +17,21 @@ class ListMini extends StatefulWidget {
 
 class _ListMiniState extends State<ListMini> {
   final List<Minibus> transactions = [];
+  String time;
 
   void addNewTransaction() async {
     List<LatLng> puntosF = [];
-
     LatLng fromPointNear;
     LatLng posFinal = LatLng(0.0, 0.0);
     LatLng toPointNear;
     int flag = -1;
     int cont = 0;
-    String time;
+    int tiempo = 0;
     await Firestore.instance.collection('zapp3').getDocuments().then(
       (QuerySnapshot docs) async {
         docs.documents.forEach((f) async {
           cont = 0;
+          tiempo = 0;
           var api = Provider.of<DirectionsProvider>(context);
           //var api2 = Provider.of<TimeProvider>(context);
           api.findDirectons(widget.posFrom, posFinal, puntosF);
@@ -50,12 +51,14 @@ class _ListMiniState extends State<ListMini> {
 
             if (fromPointNear != null || toPointNear != null) {
               cont++;
+              tiempo++;
               print('puntoP------------');
               flag *= -1;
               puntosF
                   .add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
             } else {
               if (flag == 1) {
+                tiempo++;
                 print('puntoM------------');
                 puntosF
                     .add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
@@ -64,13 +67,13 @@ class _ListMiniState extends State<ListMini> {
           }
           if (puntosF.isNotEmpty && cont == 2) {
             print('+++++++++++++');
-            time = await api.findTime(widget.posFrom, widget.posTo);
+            // time = await api.findTime(widget.posFrom, widget.posTo);
             // print(time);
             //api.findTime(widget.posFrom, posFinal).toString();
             print(puntosF);
             final newTx = Minibus(
               linea: f.documentID,
-              tiempo: time,
+              tiempo: (tiempo / 2).round().toString(),
               puntos: puntosF,
             );
             setState(() {
@@ -89,6 +92,7 @@ class _ListMiniState extends State<ListMini> {
   @override
   void initState() {
     super.initState();
+
     addNewTransaction();
   }
 
@@ -96,9 +100,10 @@ class _ListMiniState extends State<ListMini> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        // automaticallyImplyLeading: false,
+        backgroundColor: Colors.orange,
         title: Text(
-          'Flutter App',
+          'Lista de lineas',
         ),
       ),
       body: SingleChildScrollView(
@@ -137,6 +142,7 @@ class _ListMiniState extends State<ListMini> {
                               backgroundImage: NetworkImage(
                                   'http://www.thevacollective.com/wp-content/uploads/2017/07/Road-Icon-Homepage-260x260.png'),
                               radius: 30,
+                              backgroundColor: Colors.deepOrange,
                               child: Padding(
                                 padding: const EdgeInsets.all(5),
                                 // child: FittedBox(
@@ -149,10 +155,12 @@ class _ListMiniState extends State<ListMini> {
                               'Linea: ${transactions[index].linea}',
                               style: Theme.of(context).textTheme.title,
                             ),
+                            subtitle: Text(
+                                'Tiempo estimado: ${transactions[index].tiempo} mins.'),
                             trailing: IconButton(
                               icon: Icon(
                                 Icons.map,
-                                color: Theme.of(context).primaryColorLight,
+                                color: Colors.deepOrangeAccent,
                               ),
                               //onPressed: () => deleteTx(transactions[index].id),
                               onPressed: () {
@@ -163,6 +171,8 @@ class _ListMiniState extends State<ListMini> {
                                       toPoint: widget.posTo,
                                       fromPoint: widget.posFrom,
                                       points: transactions[index].puntos,
+                                      linea: transactions[index].linea,
+                                      tiempo: transactions[index].tiempo,
                                     ),
                                   ),
                                 );
