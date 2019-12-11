@@ -13,8 +13,10 @@ class RouteScreen extends StatefulWidget {
   final LatLng fromPoint;
   final LatLng toPoint;
   final List<LatLng> points;
+  final String linea;
+  final String tiempo;
 
-  RouteScreen({this.fromPoint, this.toPoint, this.points});
+  RouteScreen({this.fromPoint, this.toPoint, this.points, this.linea, this.tiempo});
 
   @override
   _RouteScreenState createState() => _RouteScreenState();
@@ -25,6 +27,7 @@ class _RouteScreenState extends State<RouteScreen> {
   BitmapDescriptor customIcon;
   Set<Marker> markers;
   var way = <webs.Waypoint>[];
+  String tiempo;
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _RouteScreenState extends State<RouteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Route"),
+        title: Text("Linea: ${widget.linea}\nTiempo estimado: ${widget.tiempo} mins"),
       ),
       body: Consumer<DirectionsProvider>(
         builder: (BuildContext context, DirectionsProvider api, Widget child) {
@@ -51,64 +54,14 @@ class _RouteScreenState extends State<RouteScreen> {
             myLocationButtonEnabled: true,
             myLocationEnabled: true,
           );
-
         },
-        
       ),
-      
+
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.zoom_out_map),
-              onPressed: _centerView,
-            ),
-
-      // floatingActionButton: Container(
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.end,
-      //     children: <Widget>[
-      //       FloatingActionButton(
-      //         child: Icon(Icons.zoom_out_map),
-      //         onPressed: _centerView,
-      //       ),
-      //       FloatingActionButton(
-      //         child: Icon(Icons.zoom_out_map),
-      //         onPressed: _centerView,
-      //       ),
-      //     ],
-      //   ),
-      // ),
-
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // floatingActionButton: Stack(
-      //   children: <Widget>[
-      //     Padding(
-      //       padding: EdgeInsets.only(left: 31),
-      //       child: Align(
-      //         alignment: Alignment.bottomLeft,
-      //         child: FloatingActionButton(
-      //           child: Text('Linea'),
-      //           backgroundColor: Colors.purple,
-      //           onPressed: () {},
-      //         ),
-      //       ),
-      //     ),
-      //     Align(
-      //       alignment: Alignment.bottomCenter,
-      //       child: FloatingActionButton(
-      //         child: Text('time'),
-      //         backgroundColor: Colors.amber,
-      //         onPressed: () {},
-      //       ),
-      //     ),
-      //     Align(
-      //       alignment: Alignment.bottomRight,
-      //       child: FloatingActionButton(
-      //         child: Icon(Icons.zoom_out_map),
-      //         onPressed: _centerView,
-      //       ),
-      //     ),
-      //   ],
-      // ),
+        child: Icon(Icons.zoom_out_map),
+        onPressed: _centerView,
+      ),
     );
   }
 
@@ -154,13 +107,18 @@ class _RouteScreenState extends State<RouteScreen> {
   //   }
 
   // }
-  void _onMapCreated(GoogleMapController controller) async {
+  void _onMapCreated(GoogleMapController controller) {
     LatLng fromPointNear = widget.fromPoint;
     LatLng toPointNear = widget.toPoint;
     _mapController = controller;
     _centerView();
     var api = Provider.of<DirectionsProvider>(context);
-    print(widget.points);
+    // print(widget.points);
+
+    // setState(() async {
+    //   tiempo = await api.findTime(widget.fromPoint, widget.toPoint);
+    //   print(tiempo);
+    // });
     api.findDirectons(fromPointNear, toPointNear, widget.points)();
   }
 
