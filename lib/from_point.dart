@@ -18,10 +18,20 @@ class _FromPointState extends State<FromPoint> {
 
   String searchAddr;
 
+  //Position userLocation = Position(latitude: -16.522815, longitude:-68.111820);
+  Position userLocation;
+
+  Geolocator geolocator = Geolocator();
+
   @override
   void initState() {
     super.initState();
     markers = Set.from([]);
+    getLocation().then((position) {
+      setState(() {
+        userLocation = position;
+      });
+    });
   }
 
   void onMapCreated(controller) {
@@ -33,12 +43,23 @@ class _FromPointState extends State<FromPoint> {
   }
 
   searchandNavigate() {
-    Geolocator().placemarkFromAddress(searchAddr).then((result) {
+    geolocator.placemarkFromAddress(searchAddr).then((result) {
       mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
           target:
               LatLng(result[0].position.latitude, result[0].position.longitude),
           zoom: 18.0)));
     });
+  }
+
+  Future<Position> getLocation() async {
+    var currentLocation;
+    try {
+      currentLocation = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      currentLocation = null;
+    }
+    return currentLocation;
   }
 
   @override
@@ -75,7 +96,8 @@ class _FromPointState extends State<FromPoint> {
 
             initialCameraPosition: CameraPosition(
               // target: LatLng(-16.5, -68.1500015),
-              target: LatLng(-16.522815, -68.111820),
+              // target: LatLng(-16.522815, -68.111820),
+              target: LatLng(userLocation.latitude, userLocation.longitude),
               zoom: 18,
             ),
           ),
