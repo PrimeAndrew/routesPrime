@@ -26,7 +26,8 @@ class _ToPointState extends State<ToPoint> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("To Point"),
+        title: Text("Punto de destino"),
+        backgroundColor: Colors.redAccent,
       ),
       body: GoogleMap(
         myLocationButtonEnabled: true,
@@ -47,7 +48,6 @@ class _ToPointState extends State<ToPoint> {
           positionTo = pos;
         },
         onMapCreated: (GoogleMapController controller) {
-
           Marker m = Marker(
             markerId: MarkerId('1'),
             icon: BitmapDescriptor.defaultMarkerWithHue(120.0),
@@ -63,7 +63,8 @@ class _ToPointState extends State<ToPoint> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text('Ok'),
+        backgroundColor: Colors.red,
+        child: Icon(Icons.keyboard_arrow_right),
         onPressed: () {
           Navigator.push(
             context,
