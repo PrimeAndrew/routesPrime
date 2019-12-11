@@ -16,6 +16,8 @@ class Prueba extends StatefulWidget {
 }
 
 class _PruebaState extends State<Prueba> {
+  TextEditingController txtController = TextEditingController();
+
   final databaseReference = Firestore.instance;
   final db = 'zapp2';
 
@@ -23,11 +25,11 @@ class _PruebaState extends State<Prueba> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("HOla"),
+        title: Text("Admin menu"),
       ),
       body: Center(
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           RaisedButton(
             child: Text('Create Record'),
@@ -35,26 +37,27 @@ class _PruebaState extends State<Prueba> {
               createRecord();
             },
           ),
-          RaisedButton(
-            child: Text('View Record'),
-            onPressed: () {
-              getData();
-            },
-          ),
-          RaisedButton(
-            child: Text('Update Record'),
-            onPressed: () {
-              updateData();
-            },
+
+          // Row(
+          //   children: <Widget>[
+          Container(
+            width: 70,
+            child: TextField(
+              controller: txtController,
+              keyboardType: TextInputType.numberWithOptions(decimal: false),
+            ),
           ),
           RaisedButton(
             child: Text('Delete Record'),
             onPressed: () {
-              deleteData();
+              deleteData(txtController.text);
             },
           ),
+          //   ],
+          // ),
+
           RaisedButton(
-            child: Text('List'),
+            child: Text('List lines'),
             onPressed: () {
               Navigator.push(
                 context,
@@ -64,8 +67,22 @@ class _PruebaState extends State<Prueba> {
               );
             },
           ),
+
           RaisedButton(
-            child: Text('encontrar'),
+            child: Text('View Record by console'),
+            onPressed: () {
+              getData();
+            },
+          ),
+          // RaisedButton(
+          //   child: Text('Update Record'),
+          //   onPressed: () {
+          //     updateData();
+          //   },
+          // ),
+
+          RaisedButton(
+            child: Text('Test all point by console'),
             onPressed: () {
               encontrar();
             },
@@ -165,9 +182,6 @@ class _PruebaState extends State<Prueba> {
         '31': GeoPoint(-16.54119, -68.09142),
       },
     );
-    
-
-   
   }
 
   void getData() {
@@ -219,9 +233,9 @@ class _PruebaState extends State<Prueba> {
     }
   }
 
-  void deleteData() {
+  void deleteData(String cad) {
     try {
-      databaseReference.collection(db).document('1').delete();
+      databaseReference.collection('zapp3').document(cad).delete();
     } catch (e) {
       print(e.toString());
     }
