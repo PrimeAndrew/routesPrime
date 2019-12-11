@@ -51,12 +51,64 @@ class _RouteScreenState extends State<RouteScreen> {
             myLocationButtonEnabled: true,
             myLocationEnabled: true,
           );
+
         },
+        
       ),
+      
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.zoom_out_map),
-        onPressed: _centerView,
-      ),
+              child: Icon(Icons.zoom_out_map),
+              onPressed: _centerView,
+            ),
+
+      // floatingActionButton: Container(
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.end,
+      //     children: <Widget>[
+      //       FloatingActionButton(
+      //         child: Icon(Icons.zoom_out_map),
+      //         onPressed: _centerView,
+      //       ),
+      //       FloatingActionButton(
+      //         child: Icon(Icons.zoom_out_map),
+      //         onPressed: _centerView,
+      //       ),
+      //     ],
+      //   ),
+      // ),
+
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Stack(
+      //   children: <Widget>[
+      //     Padding(
+      //       padding: EdgeInsets.only(left: 31),
+      //       child: Align(
+      //         alignment: Alignment.bottomLeft,
+      //         child: FloatingActionButton(
+      //           child: Text('Linea'),
+      //           backgroundColor: Colors.purple,
+      //           onPressed: () {},
+      //         ),
+      //       ),
+      //     ),
+      //     Align(
+      //       alignment: Alignment.bottomCenter,
+      //       child: FloatingActionButton(
+      //         child: Text('time'),
+      //         backgroundColor: Colors.amber,
+      //         onPressed: () {},
+      //       ),
+      //     ),
+      //     Align(
+      //       alignment: Alignment.bottomRight,
+      //       child: FloatingActionButton(
+      //         child: Icon(Icons.zoom_out_map),
+      //         onPressed: _centerView,
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
