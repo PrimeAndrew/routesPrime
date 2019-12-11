@@ -65,7 +65,7 @@ class _ListMiniState extends State<ListMini> {
           if (puntosF.isNotEmpty && cont == 2) {
             print('+++++++++++++');
             time = await api.findTime(widget.posFrom, widget.posTo);
-            print(time);
+            // print(time);
             //api.findTime(widget.posFrom, posFinal).toString();
             print(puntosF);
             final newTx = Minibus(
@@ -134,13 +134,15 @@ class _ListMiniState extends State<ListMini> {
                           ),
                           child: ListTile(
                             leading: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  'http://www.thevacollective.com/wp-content/uploads/2017/07/Road-Icon-Homepage-260x260.png'),
                               radius: 30,
                               child: Padding(
                                 padding: const EdgeInsets.all(5),
-                                child: FittedBox(
-                                  child: Text(
-                                      '${transactions[index].tiempo}'),
-                                ),
+                                // child: FittedBox(
+                                //   child: Text(
+                                //       '${transactions[index].tiempo}'),
+                                // ),
                               ),
                             ),
                             title: Text(
