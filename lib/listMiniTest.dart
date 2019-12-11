@@ -6,66 +6,47 @@ import 'package:provider/provider.dart';
 import 'package:zapp2/route_screen.dart';
 import 'directions_provider.dart';
 
-class ListMini extends StatefulWidget {
-  final LatLng posFrom;
-  final LatLng posTo;
+class ListMiniTest extends StatefulWidget {
 
-  const ListMini({this.posFrom, this.posTo});
+  const ListMiniTest();
   @override
-  _ListMiniState createState() => _ListMiniState();
+  _ListMiniTestState createState() => _ListMiniTestState();
 }
 
-class _ListMiniState extends State<ListMini> {
+class _ListMiniTestState extends State<ListMiniTest> {
   final List<Minibus> transactions = [];
+  LatLng fromPoint;
+  LatLng toPoint;
 
   void addNewTransaction() async {
     List<LatLng> puntosF = [];
 
-    LatLng fromPointNear;
-    LatLng posFinal = LatLng(0.0, 0.0);
-    LatLng toPointNear;
-    int flag = -1;
-    int cont = 0;
+
+
     String time;
     await Firestore.instance.collection('zapp3').getDocuments().then(
       (QuerySnapshot docs) async {
         docs.documents.forEach((f) async {
-          cont = 0;
           var api = Provider.of<DirectionsProvider>(context);
-          //var api2 = Provider.of<TimeProvider>(context);
-          api.findDirectons(widget.posFrom, posFinal, puntosF);
+          //print(f.data['1'].latitude.toString());
+          fromPoint=LatLng(f.data['1'].latitude, f.data['1'].longitude);
+          toPoint= LatLng(f.data['${f.data.length}'].latitude, f.data['${f.data.length}'].longitude);
+          print("=========================");
+          print(fromPoint.latitude.toString()+"|fff|"+fromPoint.longitude.toString());
+          print(toPoint.latitude.toString()+"|fff|"+toPoint.longitude.toString());
 
+          //api.findDirectons(fromPoint, toPoint, puntosF);
           puntosF = [];
           for (int i = 1; i <= f.data.length; i++) {
             print(f.data['$i'].latitude.toString() +
                 '|${f.documentID}|' +
                 f.data['$i'].longitude.toString());
-            posFinal = LatLng(f.data['$i'].latitude, f.data['$i'].longitude);
-            // print(posFromFinal);
-            fromPointNear = api.getFromPointNear2(widget.posFrom, posFinal);
-            toPointNear = api.getFromPointNear2(widget.posTo, posFinal);
-            // print('$toPointNear');
-            print('Near: $fromPointNear , $toPointNear, $flag');
 
-            if (fromPointNear != null || toPointNear != null) {
-              cont++;
-              print('puntoP------------');
-              flag *= -1;
-              puntosF
-                  .add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
-            } else {
-              if (flag == 1) {
-                print('puntoM------------');
-                puntosF
-                    .add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
-              }
-            }
+
+            puntosF.add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
           }
-          if (puntosF.isNotEmpty && cont == 2) {
-            print('+++++++++++++');
-            time = await api.findTime(widget.posFrom, posFinal);
+            time = await api.findTime(fromPoint,toPoint);
             print(time);
-            //api.findTime(widget.posFrom, posFinal).toString();
             print(puntosF);
             final newTx = Minibus(
               linea: f.documentID,
@@ -75,12 +56,9 @@ class _ListMiniState extends State<ListMini> {
             setState(() {
               transactions.add(newTx);
             });
-          }
-          flag = -1;
+          
           print('___________________________________________________');
-          //print(puntosF);
         });
-        // print(transactions);
       },
     );
   }
@@ -137,8 +115,7 @@ class _ListMiniState extends State<ListMini> {
                               child: Padding(
                                 padding: const EdgeInsets.all(5),
                                 child: FittedBox(
-                                  child: Text(
-                                      '${transactions[index].tiempo}'),
+                                  child: Text('${transactions[index].tiempo}'),
                                 ),
                               ),
                             ),
@@ -157,8 +134,8 @@ class _ListMiniState extends State<ListMini> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => RouteScreen(
-                                      toPoint: widget.posTo,
-                                      fromPoint: widget.posFrom,
+                                      fromPoint: transactions[index].puntos[0],
+                                      toPoint: transactions[index].puntos[transactions[index].puntos.length-1],
                                       points: transactions[index].puntos,
                                     ),
                                   ),
@@ -176,10 +153,10 @@ class _ListMiniState extends State<ListMini> {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: Icon(Icons.loop),
-      //   onPressed: () => addNewTransaction(),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.loop),
+        onPressed: () => addNewTransaction(),
+      ),
     );
   }
 }
