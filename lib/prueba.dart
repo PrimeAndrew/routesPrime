@@ -114,7 +114,7 @@ class _PruebaState extends State<Prueba> {
     await databaseReference.collection('zapp3').document("777").setData(
       {
         '1': GeoPoint(-16.52232, -68.11375),
-        '2': GeoPoint(-16.52292, -68.11267),
+        '2': GeoPoint(-16.52273, -68.11301),
         '3': GeoPoint(-16.52312, -68.11232),
         '4': GeoPoint(-16.52353, -68.11157),
         '5': GeoPoint(-16.52392, -68.11083),
