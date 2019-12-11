@@ -34,6 +34,7 @@ class _ListMiniState extends State<ListMini> {
           var api = Provider.of<DirectionsProvider>(context);
           //var api2 = Provider.of<TimeProvider>(context);
           api.findDirectons(widget.posFrom, posFinal, puntosF);
+          // api.findDirectons(widget.posFrom, widget.posTo, puntosF);
 
           puntosF = [];
           for (int i = 1; i <= f.data.length; i++) {
@@ -63,7 +64,7 @@ class _ListMiniState extends State<ListMini> {
           }
           if (puntosF.isNotEmpty && cont == 2) {
             print('+++++++++++++');
-            time = await api.findTime(widget.posFrom, posFinal);
+            time = await api.findTime(widget.posFrom, widget.posTo);
             print(time);
             //api.findTime(widget.posFrom, posFinal).toString();
             print(puntosF);
