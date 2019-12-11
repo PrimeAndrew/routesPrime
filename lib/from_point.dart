@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:toast/toast.dart';
 import 'package:zapp2/to_point.dart';
 
 class FromPoint extends StatefulWidget {
@@ -20,7 +21,6 @@ class _FromPointState extends State<FromPoint> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text("Punto de partida"),
@@ -43,7 +43,10 @@ class _FromPointState extends State<FromPoint> {
           });
           positionFrom = pos;
         },
-        onMapCreated: (GoogleMapController controller) {},
+        onMapCreated: (GoogleMapController controller) {
+          Toast.show("Marque un origen", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        },
         initialCameraPosition: CameraPosition(
           // target: LatLng(-16.5, -68.1500015),
           target: LatLng(-16.522815, -68.111820),
@@ -54,14 +57,17 @@ class _FromPointState extends State<FromPoint> {
         backgroundColor: Colors.green,
         child: Icon(Icons.keyboard_arrow_right),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ToPoint(
-                posFrom: positionFrom
+          if (positionFrom == null) {
+            Toast.show("Marque un origen porfavor", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ToPoint(posFrom: positionFrom),
               ),
-            ),
-          );
+            );
+          }
         },
       ),
     );

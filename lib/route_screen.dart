@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:toast/toast.dart';
 import 'directions_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_webservice/directions.dart' as webs;
@@ -112,6 +113,8 @@ class _RouteScreenState extends State<RouteScreen> {
     LatLng toPointNear = widget.toPoint;
     _mapController = controller;
     _centerView();
+     Toast.show("Ruta con exito", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
     var api = Provider.of<DirectionsProvider>(context);
     // print(widget.points);
 

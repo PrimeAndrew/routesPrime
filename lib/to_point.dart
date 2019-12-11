@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:toast/toast.dart';
 import 'package:zapp2/listMini.dart';
 //import 'package:zapp2/route_screen.dart';
 
@@ -56,6 +57,8 @@ class _ToPointState extends State<ToPoint> {
           setState(() {
             markers.add(m);
           });
+          Toast.show("Marque un destino", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         },
         initialCameraPosition: CameraPosition(
           target: LatLng(widget.posFrom.latitude, widget.posFrom.longitude),
@@ -66,23 +69,28 @@ class _ToPointState extends State<ToPoint> {
         backgroundColor: Colors.red,
         child: Icon(Icons.keyboard_arrow_right),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              // builder: (context) => RouteScreen(
-              //   fromPoint: widget.posFrom,
-              //   toPoint: position,
-              // ),
-              // builder: (context) => RouteScreen(
-              //   toPoint: positionTo,
-              //   fromPoint: widget.posFrom,
-              // ),
-              builder: (context) => ListMini(
-                posTo: positionTo,
-                posFrom: widget.posFrom,
+          if (positionTo == null) {
+            Toast.show("Marque un destino porfavor", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                // builder: (context) => RouteScreen(
+                //   fromPoint: widget.posFrom,
+                //   toPoint: position,
+                // ),
+                // builder: (context) => RouteScreen(
+                //   toPoint: positionTo,
+                //   fromPoint: widget.posFrom,
+                // ),
+                builder: (context) => ListMini(
+                  posTo: positionTo,
+                  posFrom: widget.posFrom,
+                ),
               ),
-            ),
-          );
+            );
+          }
         },
       ),
     );
