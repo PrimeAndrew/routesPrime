@@ -80,7 +80,7 @@ class DirectionsProvider extends ChangeNotifier {
 
   //   print(result.toString());
   // }
-  findTime(maps.LatLng from, maps.LatLng to)async{
+  findTime(maps.LatLng from, maps.LatLng to) async{
     String times = '';
     var origin = Location(from.latitude, from.longitude);
     var destination = Location(to.latitude, to.longitude);
@@ -98,6 +98,7 @@ class DirectionsProvider extends ChangeNotifier {
       });
       notifyListeners();
     }
+    print('DirectionsProvider time:');
     print(times);
     return times;
   }
