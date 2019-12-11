@@ -23,7 +23,8 @@ class _FromPointState extends State<FromPoint> {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text("From Point"),
+        title: Text("Punto de partida"),
+        backgroundColor: Colors.green,
       ),
       body: GoogleMap(
         myLocationButtonEnabled: true,
@@ -50,7 +51,8 @@ class _FromPointState extends State<FromPoint> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Text('Next'),
+        backgroundColor: Colors.green,
+        child: Icon(Icons.keyboard_arrow_right),
         onPressed: () {
           Navigator.push(
             context,
