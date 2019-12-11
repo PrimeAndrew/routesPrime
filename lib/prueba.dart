@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zapp2/minibus.dart';
 import 'dart:math';
-
-import 'listMini.dart';
+import 'listMiniTest.dart';
 
 class Prueba extends StatefulWidget {
   // final LatLng cad1;
@@ -60,7 +59,7 @@ class _PruebaState extends State<Prueba> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ListMini(),
+                  builder: (context) => ListMiniTest(),
                 ),
               );
             },
@@ -76,38 +75,64 @@ class _PruebaState extends State<Prueba> {
     );
   }
 
+  // void createRecord() async {
+  //   // 1
+  //   await databaseReference.collection(db).document("1").setData({
+  //     'line': '366',
+  //   });
+  //   await databaseReference
+  //       .collection(db)
+  //       .document("1")
+  //       .collection('rutaida')
+  //       .document('1')
+  //       .setData({
+  //     'point': GeoPoint(-16.506721, -68.139761),
+  //   });
+
+  //   // 2
+  //   await databaseReference.collection(db).document("2").setData({
+  //     'line': '259',
+  //   });
+  //   await databaseReference
+  //       .collection(db)
+  //       .document("2")
+  //       .collection('rutaida')
+  //       .document('1')
+  //       .setData({
+  //     'point': GeoPoint(-16.508943, -68.135652),
+  //   });
+
+  //   // DocumentReference ref = await databaseReference.collection(db).add({
+  //   //   'title': 'Flutter in Action',
+  //   //   'description': 'Complete Programming Guide to learn Flutter'
+  //   // });
+  //   // print(ref.documentID);
+  // }
+
   void createRecord() async {
     // 1
-    await databaseReference.collection(db).document("1").setData({
-      'line': '366',
-    });
-    await databaseReference
-        .collection(db)
-        .document("1")
-        .collection('rutaida')
-        .document('1')
-        .setData({
-      'point': GeoPoint(-16.506721, -68.139761),
-    });
+    await databaseReference.collection('zapp3').document("777").setData(
+      {
+        '1': GeoPoint(-16.52232, -68.11375),
+        '2': GeoPoint(-16.52292, -68.11267),
+        '3': GeoPoint(-16.52312, -68.11232),
+        '4': GeoPoint(-16.52353, -68.11157),
+        '5': GeoPoint(-16.52392, -68.11083),
+        '6': GeoPoint(-16.52435, -68.11008),
+        '7': GeoPoint(-16.52476, -68.10933),
+        '8': GeoPoint(-16.52517, -68.10861),
+        '9': GeoPoint(-16.52558, -68.10784),
+        '10': GeoPoint(-16.52587, -68.10728),
+        '11': GeoPoint(-16.52628, -68.10654),
+        '12': GeoPoint(-16.52668, -68.10582),
+        '13': GeoPoint(-16.52711, -68.10503),
+        '14': GeoPoint(-16.52769, -68.1054),
+        '15': GeoPoint(-16.52827, -68.10575),
+      },
+    );
+    
 
-    // 2
-    await databaseReference.collection(db).document("2").setData({
-      'line': '259',
-    });
-    await databaseReference
-        .collection(db)
-        .document("2")
-        .collection('rutaida')
-        .document('1')
-        .setData({
-      'point': GeoPoint(-16.508943, -68.135652),
-    });
-
-    // DocumentReference ref = await databaseReference.collection(db).add({
-    //   'title': 'Flutter in Action',
-    //   'description': 'Complete Programming Guide to learn Flutter'
-    // });
-    // print(ref.documentID);
+   
   }
 
   void getData() {
