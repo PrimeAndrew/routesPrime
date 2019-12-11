@@ -7,7 +7,6 @@ import 'package:zapp2/route_screen.dart';
 import 'directions_provider.dart';
 
 class ListMiniTest extends StatefulWidget {
-
   const ListMiniTest();
   @override
   _ListMiniTestState createState() => _ListMiniTestState();
@@ -21,19 +20,21 @@ class _ListMiniTestState extends State<ListMiniTest> {
   void addNewTransaction() async {
     List<LatLng> puntosF = [];
 
-
-
     String time;
     await Firestore.instance.collection('zapp3').getDocuments().then(
       (QuerySnapshot docs) async {
         docs.documents.forEach((f) async {
           var api = Provider.of<DirectionsProvider>(context);
-          //print(f.data['1'].latitude.toString());
-          fromPoint=LatLng(f.data['1'].latitude, f.data['1'].longitude);
-          toPoint= LatLng(f.data['${f.data.length}'].latitude, f.data['${f.data.length}'].longitude);
+          fromPoint = LatLng(f.data['1'].latitude, f.data['1'].longitude);
+          toPoint = LatLng(f.data['${f.data.length}'].latitude,
+              f.data['${f.data.length}'].longitude);
           print("=========================");
-          print(fromPoint.latitude.toString()+"|fff|"+fromPoint.longitude.toString());
-          print(toPoint.latitude.toString()+"|fff|"+toPoint.longitude.toString());
+          print(fromPoint.latitude.toString() +
+              "|fff|" +
+              fromPoint.longitude.toString());
+          print(toPoint.latitude.toString() +
+              "|fff|" +
+              toPoint.longitude.toString());
 
           //api.findDirectons(fromPoint, toPoint, puntosF);
           puntosF = [];
@@ -42,21 +43,21 @@ class _ListMiniTestState extends State<ListMiniTest> {
                 '|${f.documentID}|' +
                 f.data['$i'].longitude.toString());
 
-
             puntosF.add(LatLng(f.data['$i'].latitude, f.data['$i'].longitude));
           }
-            time = await api.findTime(fromPoint,toPoint);
-            print(time);
-            print(puntosF);
-            final newTx = Minibus(
-              linea: f.documentID,
-              tiempo: time,
-              puntos: puntosF,
-            );
-            setState(() {
-              transactions.add(newTx);
-            });
-          
+         print(puntosF);
+        //  time = await api.findTime(fromPoint, toPoint);
+        //   print(time);
+
+          final newTx = Minibus(
+            linea: f.documentID,
+            tiempo: time,
+            puntos: puntosF,
+          );
+          setState(() {
+            transactions.add(newTx);
+          });
+
           print('___________________________________________________');
         });
       },
@@ -111,11 +112,12 @@ class _ListMiniTestState extends State<ListMiniTest> {
                           ),
                           child: ListTile(
                             leading: CircleAvatar(
+                              backgroundImage: NetworkImage('http://www.thevacollective.com/wp-content/uploads/2017/07/Road-Icon-Homepage-260x260.png'),
                               radius: 30,
                               child: Padding(
                                 padding: const EdgeInsets.all(5),
                                 child: FittedBox(
-                                  child: Text('${transactions[index].tiempo}'),
+                                  
                                 ),
                               ),
                             ),
@@ -130,6 +132,10 @@ class _ListMiniTestState extends State<ListMiniTest> {
                               ),
                               //onPressed: () => deleteTx(transactions[index].id),
                               onPressed: () {
+                                // print(transactions[index].linea);
+
+                                // print(transactions[index].tiempo);
+                                // print(transactions[index].puntos);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
