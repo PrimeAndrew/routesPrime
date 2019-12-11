@@ -24,7 +24,6 @@ class _ListMiniTestState extends State<ListMiniTest> {
     await Firestore.instance.collection('zapp3').getDocuments().then(
       (QuerySnapshot docs) async {
         docs.documents.forEach((f) async {
-          var api = Provider.of<DirectionsProvider>(context);
           fromPoint = LatLng(f.data['1'].latitude, f.data['1'].longitude);
           toPoint = LatLng(f.data['${f.data.length}'].latitude,
               f.data['${f.data.length}'].longitude);
