@@ -9,13 +9,13 @@ class DirectionsProvider extends ChangeNotifier {
   final db = 'zapp2';
   static String v1;
   static String v2;
+  static String time;
 
   GoogleMapsDirections directionsApi =
       GoogleMapsDirections(apiKey: 'AIzaSyDMOOwylpSGWL8CBIKlNLFnh_3dDOtDS0g');
   Set<maps.Polyline> _route = Set();
   Set<maps.Polyline> get currentRoute => _route;
 
-  
   // var way = <Waypoint>[];
   // Firestore.instance
   //     .collection(db)
@@ -33,7 +33,6 @@ class DirectionsProvider extends ChangeNotifier {
   //     print(way[0]);
   //   },
   // );
-
 
   // codigo findirections original funcional
   // findDirectons(maps.LatLng from, maps.LatLng to, List<Waypoint> way) async {
@@ -81,8 +80,30 @@ class DirectionsProvider extends ChangeNotifier {
 
   //   print(result.toString());
   // }
+  findTime(maps.LatLng from, maps.LatLng to)async{
+    String times = '';
+    var origin = Location(from.latitude, from.longitude);
+    var destination = Location(to.latitude, to.longitude);
 
-  findDirectons(maps.LatLng from, maps.LatLng to, List<maps.LatLng> points) async {
+    var result = await directionsApi.directionsWithLocation(
+      origin,
+      destination,
+      travelMode: TravelMode.driving,
+    );
+    if (result.isOkay) {
+      var route = result.routes[0];
+      var leg = route.legs[0];
+      leg.steps.forEach((step) {
+        times = step.duration.text.toString();
+      });
+      notifyListeners();
+    }
+    print(times);
+    return times;
+  }
+
+  findDirectons(
+      maps.LatLng from, maps.LatLng to, List<maps.LatLng> points) async {
     var origin = Location(from.latitude, from.longitude);
     var destination = Location(to.latitude, to.longitude);
     print("hola");
@@ -102,8 +123,8 @@ class DirectionsProvider extends ChangeNotifier {
     Set<maps.Polyline> newRoute = Set();
 
     if (result.isOkay) {
-      // var route = result.routes[0];
-      // var leg = route.legs[0];
+      var route = result.routes[0];
+      var leg = route.legs[0];
 
       //List<maps.LatLng> points = [];
 
@@ -111,6 +132,10 @@ class DirectionsProvider extends ChangeNotifier {
       //   points.add(maps.LatLng(step.startLocation.lat, step.startLocation.lng));
       //   points.add(maps.LatLng(step.endLocation.lat, step.endLocation.lng));
       // });
+     
+      leg.steps.forEach((step) {
+        time = step.duration.text.toString();
+      });
 
       var line = maps.Polyline(
         // geodesic: true,
@@ -125,8 +150,9 @@ class DirectionsProvider extends ChangeNotifier {
       notifyListeners();
     }
 
-    print(result.toString());
+    // print(result.toString());
   }
+
 
   getData(maps.LatLng point) async {
     var way = <Waypoint>[];
@@ -168,7 +194,6 @@ class DirectionsProvider extends ChangeNotifier {
     return way;
   }
 
-
   getPointNear(maps.LatLng point) async {
     var centerPointlat = point.latitude;
     var centerPointlng = point.longitude;
@@ -209,7 +234,7 @@ class DirectionsProvider extends ChangeNotifier {
     return finalPoint;
   }
 
-  getFromPointNear2(maps.LatLng point, maps.LatLng pointCheck){
+  getFromPointNear2(maps.LatLng point, maps.LatLng pointCheck) {
     var centerPointlat = point.latitude;
     var centerPointlng = point.longitude;
     var checkPointlat = pointCheck.latitude;
