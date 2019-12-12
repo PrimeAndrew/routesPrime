@@ -82,7 +82,7 @@ class _ListMiniTestState extends State<ListMiniTest> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
-              height: 350,
+              height: 700,
               child: transactions.isEmpty
                   ? Column(
                       children: <Widget>[
