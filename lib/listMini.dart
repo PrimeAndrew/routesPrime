@@ -49,7 +49,7 @@ class _ListMiniState extends State<ListMini> {
             // print('$toPointNear');
             print('Near: $fromPointNear , $toPointNear, $flag');
 
-            if (fromPointNear != null || toPointNear != null) {
+            if (fromPointNear != null || toPointNear != null && cont <=1) {
               cont++;
               tiempo++;
               print('puntoP------------');
