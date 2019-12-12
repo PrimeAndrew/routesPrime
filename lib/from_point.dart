@@ -109,11 +109,16 @@ class _FromPointState extends State<FromPoint> {
               height: 50.0,
               width: double.infinity,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white),
+                borderRadius: BorderRadius.circular(10.0),
+                color: Colors.white,
+                border: Border.all(
+                  width: 2,
+                  color: Colors.green,
+                ),
+              ),
               child: TextField(
                 decoration: InputDecoration(
-                    hintText: 'Enter Address',
+                    hintText: 'Ingrese una dirección',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
                     suffixIcon: IconButton(
