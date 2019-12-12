@@ -49,7 +49,7 @@ class _ListMiniState extends State<ListMini> {
             // print('$toPointNear');
             print('Near: $fromPointNear , $toPointNear, $flag');
 
-            if (fromPointNear != null || toPointNear != null && cont <=1) {
+            if (fromPointNear != null || toPointNear != null && cont <= 1) {
               cont++;
               tiempo++;
               print('puntoP------------');
@@ -123,11 +123,12 @@ class _ListMiniState extends State<ListMini> {
                           height: 15,
                         ),
                         Container(
-                            height: 200,
-                            child: Image.asset(
-                              'assets/images/waiting.png',
-                              fit: BoxFit.cover,
-                            )),
+                          height: 200,
+                          child: Image.asset(
+                            'assets/images/waiting.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ],
                     )
                   : ListView.builder(
